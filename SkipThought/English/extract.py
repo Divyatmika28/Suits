@@ -32,7 +32,7 @@ def clean(filename):
 	1. The attribute error in catchphrase tag
 	2. Escape characters
 	:param filename: file path of file to clean
-	:return:
+	:return: cleaned file contents
 	"""
 	with open(filename) as fp:
 		file_content = fp.read()

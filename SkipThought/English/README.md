@@ -3,3 +3,8 @@
 ## Set Up
 * Download AUSTLII dataset from https://archive.ics.uci.edu/ml/datasets/Legal+Case+Reports
 * Copy the fulltext folder in the corpus folder and save it in this directory
+
+## Python Requirements
+```
+pip install -r requirements.txt
+``` 
