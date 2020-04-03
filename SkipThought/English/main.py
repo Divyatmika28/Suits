@@ -1,7 +1,7 @@
 """
 Main Pipeline of the code
 """
-from SkipThought.English.extract import getGroundTruth
+from extract import getGroundTruth
 from rouge import Rouge
 
 
