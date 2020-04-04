@@ -135,7 +135,7 @@ def Mod_LetSum(t):
 		found_phrases = []
 		for sarav_category in crf_to_letsum:
 			letsum_category = crf_to_letsum[sarav_category]
-			# print('letsum_category', letsum_category, sarav_category)
+			# print('letsum_category', l etsum_category, sarav_category)
 			score[letsum_category] += sum([ 1 for i in cue_phrases[sarav_category] if i in line])
 			found_phrases.extend([i for i in cue_phrases[sarav_category] if i in line])
 
