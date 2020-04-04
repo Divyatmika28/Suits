@@ -17,11 +17,7 @@ class SkipThoughts:
     1: out-of-vocabulary token,
     2: start-of-string token,
     3: end-of-string token.
-  
-  Input sequences are expected to already be padded and have the end-of-string
-  token added (necessary for labels, optional for inputs; regard it as a
-  hyperparameter to the model). The start-of-string token is added
-  automatically as part of the computational graph during training."""
+"""
   
   def __init__(self, w2v_model, train=None, vocabulary_size=20000,
     batch_size=16, output_size=512, max_sequence_length=40, learning_rate=1e-3,
@@ -38,7 +34,7 @@ class SkipThoughts:
              is an instance of `tf.data.Iterator` that yields 3-tuples in the
              order bw_label, input, fw_label.
       
-      TODO: complete documentation
+     
     """
     
     # Internally used attributes
