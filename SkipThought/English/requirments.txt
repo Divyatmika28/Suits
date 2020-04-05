@@ -1,1 +1,4 @@
+gensim
+nltk
 rouge
+sentence_transformers

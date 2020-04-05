@@ -5,6 +5,7 @@
 * Copy the fulltext folder in the corpus folder and save it in this directory
 
 ## Python Requirements
+* Must install pytorch(https://pytorch.org/get-started/locally/) 
 ```
 pip install -r requirements.txt
 ``` 

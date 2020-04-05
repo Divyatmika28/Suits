@@ -21,7 +21,7 @@ def extract(filename):
 		catchphrases.append(catchphrase.text)
 	sentence_subtree = root.find('sentences')
 	full_text = []
-	for sentence in sentence_subtree:
+	for sentence in sentence_subtree[:-1]:
 		full_text.append(sentence.text)
 	return full_text, catchphrases
 
