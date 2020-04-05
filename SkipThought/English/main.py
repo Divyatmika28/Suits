@@ -46,16 +46,6 @@ def main():
 		# Cluster each embedding
 		cluster_n = 11
 		clusters = cluster(sentence_embeddings, minimum_samples=cluster_n)
-		cluster_dict = {}
-		for sentence_idx in range(len(full_text)):
-			label = clusters.labels_[sentence_idx]
-			if label not in cluster_dict:
-				cluster_dict[label] = []
-			cluster_dict[label].append(full_text[sentence_idx])
-		for label in range(cluster_n):
-			print(cluster_dict[label])
-			print()
-			print()
 		centroids = []
 		for idx in range(cluster_n):
 			centroid_id = np.where(clusters.labels_ == idx)[0]
