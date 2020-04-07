@@ -1,4 +1,7 @@
 This dataset is composed of decisions made by the French Court of cassation and summaries of these decisions made by lawyer.
+The dataset has been pulled and we followed steps from this link - https://github.com/euranova/CASS-dataset
+
+We modified the code to get 
 
 # Download the french Datset from :
 wget ftp://echanges.dila.gouv.fr/CASS/Freemium_cass_global_20180315-170000.tar.gz
