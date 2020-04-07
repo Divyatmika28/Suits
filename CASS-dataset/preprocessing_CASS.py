@@ -1,7 +1,6 @@
 '''
 Module to extract the texts and the summaries of the XML files present in the
 downloaded folder
-
 This code is partially based on the code of abisee in the repo:
 https://github.com/abisee/cnn-dailymail
 '''
@@ -13,6 +12,7 @@ import os
 import re
 import sys
 import unicodedata
+import json
 
 import spacy
 
@@ -81,21 +81,19 @@ def get_text_summary(path, name):
     return text, summary
 
 
-def tokenize_stories(text, summary, doc_name_1, doc_name_2, tokenized_stories_dir, nlp):
+def tokenize_stories(text, summary, doc_name, tokenized_stories_dir, nlp):
     '''
     Tokenize a file using Spacy Tokenizer
     :param text: a string
     :param summary: a string
-    :param doc_name_1: a string
-    :param doc_name_2: a string
+    :param doc_name: a string
     :param tokenized_stories_dir: a str with the path where the clean data
     will be created
     :param nlp: a Spacy model
     '''
 
-    story = text + '\nSUMMARY:' + summary
-    # + '\n@highlight' + summary
-    # story = summary
+    
+    story = text + '\n@summary' + summary
     res = ''
     doc = nlp(story)
     for token in doc:
@@ -104,12 +102,8 @@ def tokenize_stories(text, summary, doc_name_1, doc_name_2, tokenized_stories_di
     res = res.lower()
     res = strip_accents(res)
     res = fix_missing_new_line(res)
-    res = res.split('\nsummary : ')
-
-    with open(os.path.join('../preprocessed_data/', doc_name_1), 'w') as output:
-        output.write(res[0])
-    with open(os.path.join('../preprocessed_summary_data/', doc_name_2), 'w') as output:
-        output.write(res[1])
+    with open(os.path.join(tokenized_stories_dir, doc_name), 'w') as output:
+        output.write(res)
 
 
 def hashhex(string):
@@ -208,7 +202,6 @@ def main():
 
     # Search in all the subdirectories to find all the documents
     for path, _, files in os.walk(data_dir):
-
         for name in files:
 
             text, summary = get_text_summary(path, name)
@@ -217,21 +210,17 @@ def main():
                not re.search(r'.*(null)*\S+.*', summary, re.DOTALL):
                 break
 
+            #doc_name = name.replace('.xml', '.story')
             split_name = name.split('.')
+            doc_name = split_name[0] + '.txt'
 
-            doc_name_1 = split_name[0] + '.txt'
-            doc_name_2 = split_name[0] + '_summary.txt'
+            tokenize_stories(text, summary, doc_name, path_story, nlp)
 
+            number_files += 1
+            if number_files % 10000 == 0:
+                LOGGER.info('%d files found', number_files)
 
-            tokenize_stories(text, summary, doc_name_1, doc_name_2, path_story, nlp)
-
-            # number_files += 1
-            # if number_files == 2:
-            #     return 0
-    #         if number_files % 10 == 0:
-    #             LOGGER.info('%d files found', number_files)
-
-    # LOGGER.info('Number of files: %d', number_files)
+    LOGGER.info('Number of files: %d', number_files)
     return 0
 
 if __name__ == '__main__':
