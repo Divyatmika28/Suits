@@ -1,7 +1,7 @@
 This dataset is composed of decisions made by the French Court of cassation and summaries of these decisions made by lawyer.
 The dataset has been pulled and we followed steps from this link - https://github.com/euranova/CASS-dataset
 
-We modified the code to get 
+We modified the code to get legal document in text format which has the legal text and summary.
 
 # Download the french Datset from :
 
