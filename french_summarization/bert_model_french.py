@@ -9,6 +9,11 @@ And calculates the rouge score between true_summary and the generated summary.
 
 
 import os
+from sentence_transformers import SentenceTransformer
+from rouge import Rouge
+from sklearn.cluster import KMeans, DBSCAN
+import numpy as np
+from sklearn.metrics import pairwise_distances_argmin_min
 
 def evaluate(model_sum, gt_sum):
 	"""
