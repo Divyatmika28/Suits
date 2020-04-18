@@ -93,7 +93,7 @@ def tokenize_stories(text, summary, doc_name, tokenized_stories_dir, nlp):
     '''
 
     
-    story = text + '\n@summary' + summary
+    story = text + '\n@summary ' + summary
     res = ''
     doc = nlp(story)
     for token in doc:
