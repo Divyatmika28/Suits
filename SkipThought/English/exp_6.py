@@ -14,6 +14,7 @@ import string
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 def generateParagraphs(full_text):
@@ -46,12 +47,21 @@ def nbTrain(legal_dataset: list):
 	:return: weight of each word
 	"""
 	print("Training classifier... ", end='')
-	x_train_set = [cleanText(full_text) for full_text, _ in legal_dataset]
-	y_train_set = [legal_class for _, legal_class in legal_dataset]
+	inp_text = [cleanText(full_text) for full_text, _ in legal_dataset]
+	inp_classes = [legal_class for _, legal_class in legal_dataset]
+	class_num = 0
+	legal_class = {}
+	for inp_class in inp_classes:
+		if inp_class not in legal_class:
+			legal_class[inp_class] = class_num
+			class_num += 1
+	y_train = [legal_class[inp_class] for inp_class in inp_classes]
+	cv = CountVectorizer(strip_accents='ascii', token_pattern=u'(?ui)\\b\\w*[a-z]+\\w*\\b', lowercase=True, stop_words='english')
+	x_train_set = cv.fit_transform(inp_text)
 	naive_bayes = MultinomialNB()
-	naive_bayes.fit(x_train_set, y_train_set)
+	naive_bayes.fit(x_train_set, y_train)
 	print("Done")
-	return naive_bayes
+	return naive_bayes, cv, legal_class
 
 
 def main():
@@ -69,11 +79,16 @@ def main():
 		legal_text = generateParagraphs(legal_text)
 		legal_class = catch_phrases[-1]
 		nb_dataset.append((legal_text, catch_phrases[-1],))
-	class_model = nbTrain(nb_dataset)
+	class_model, cv, legal_classes = nbTrain(nb_dataset)
 	for full_text, catch_phrases in gt[:20]:
-		legal_class = class_model.predict(full_text)
+		texts = [re.sub(r'^(\d+) (.*)', r'\2', text) for text in full_text]
+		legal_text = " ".join(texts)
+		legal_text = generateParagraphs(legal_text)
+		legal_text = cleanText(legal_text)
+		text_cv = cv.transform([legal_text])
+		legal_class = class_model.predict(text_cv)
 		gt_legal_class = catch_phrases[-1]
-		print(legal_class, gt_legal_class, legal_class == gt_legal_class)
+		print(legal_class[0], gt_legal_class, legal_class[0] == legal_classes[gt_legal_class])
 
 
 if __name__ == "__main__":
