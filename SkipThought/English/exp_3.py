@@ -138,5 +138,5 @@ class LetsNet:
 
 if __name__ == "__main__":
 	obj = LetsNet()
-	obj.getConclusion()
+	obj.getHeadings()
 
