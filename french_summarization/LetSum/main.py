@@ -1,34 +1,21 @@
-import os
+import os, json
 import letsum_french
 
 def main():
 	# for root, dirs, files in os.walk('../preprocessed_data/'):
-	# files = ['JURITEXT000041585787.txt', 'JURITEXT000038708903.txt', 'JURITEXT000041585788.txt', 'JURITEXT000038708904.txt',
-	# 		 'JURITEXT000041585789.txt']
 	# for file in files:
 	# 	summary = letsum_test.LetSum('../preprocessed_data/' + file)
 	# 	with open(file.replace('.', '_letsum.'), 'w') as f:
 	# 		f.write(summary)
 
-	files = [
-	'JURITEXT000007013226.txt',
-	'JURITEXT000032050184.txt',
-	'JURITEXT000007013227.txt',
-	'JURITEXT000032050187.txt',
-	'JURITEXT000007015569.txt',
-	'JURITEXT000035612444.txt',
-	'JURITEXT000007015570.txt',
-	'JURITEXT000035612496.txt',
-	'JURITEXT000007015641.txt',
-	'JURITEXT000035974653.txt',
-	'JURITEXT000007015642.txt',
-	'JURITEXT000035975500.txt'
-	]
-	for file in files:
-		summary = letsum_french.letsum('../CASS-dataset/cleaned_files/' + file)
-		with open('../letsum_summary/' + file + '_summary.txt', 'w') as f:
-			f.write(summary)
-
+	input_path = os.listdir('PATH') # dir of files you want to segemnt 
+	root = 'PATH' # dir of files you want to segemnt 
+	for file in input_path:
+		file_path = os.path.join(root, file)
+		segmentation = letsum_french.letsum(file_path)
+		file_name = file.split('.')[0]
+		with open('DIR/OF/OUTPUT/' + file_name + '_segment.txt', 'w') as f:
+			json.dump(segmentation, f)
 
 if __name__ == '__main__':
 	main()

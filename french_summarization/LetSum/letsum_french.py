@@ -15,13 +15,14 @@ cue_phrases = formulated_constants_french.categorical_phrases
 
 
 def tokennize_file(file):
-	with open(file, 'r') as f:
+	with open(file, 'r', errors='ignore') as f:
 		txt = f.read()
-	case_txt = txt.split('@summary ')[0]
+	txt = txt.split('@summary ')
+	case_txt = txt[0]
 	case_txt = case_txt.replace(';', '.')
 	case_txt = case_txt.splitlines()
 
-	return case_txt
+	return case_txt, txt[1]
 
 
 def print_num_paragraphs_assigned(num_paragraphs_assigned):
@@ -31,12 +32,12 @@ def print_num_paragraphs_assigned(num_paragraphs_assigned):
 
 def letsum(file):
 
-	case_in_paragraph = tokennize_file(file)
+	case_in_paragraph, summary_txt = tokennize_file(file)
 	# used for checking purposes, not functionality of letsum
 	num_paragraphs_assigned = {'Introduction': 0, 'Context': 0, 'Analysis': 0, 'Conclusion': 0, 'Citation': 0}
+	category_txt = {'Introduction': '', 'Context': '', 'Analysis': '', 'Conclusion': '', 'Citation': '', 'Summary': ''}
 
 	if len(case_in_paragraph) > 4:
-		category_txt = {'Introduction': '', 'Context': '', 'Analysis': '', 'Conclusion': '', 'Citation': ''}
 		intro_to_context = False
 		context_to_analysis = False
 		analysis_to_conclusion = False
@@ -107,7 +108,6 @@ def letsum(file):
 				num_paragraphs_assigned['Analysis'] += 1
 
 	if len(case_in_paragraph) == 4:
-		category_txt = {'Introduction': '', 'Context': '', 'Analysis': '', 'Conclusion': '', 'Citation': ''}
 		category_txt['Introduction'] += case_in_paragraph[0]
 		category_txt['Context'] += case_in_paragraph[1]
 		category_txt['Analysis'] += case_in_paragraph[2]
@@ -130,11 +130,6 @@ def letsum(file):
 				print('category_highest_score: ', category_highest_score)
 				category_txt[category_highest_score] = sentence
 
-	print(file)
-	# print(len(case_in_paragraph))
-	print_num_paragraphs_assigned(num_paragraphs_assigned)
-	for cat, para in category_txt.items():
-		print(cat, ': \n', para)
+	category_txt['Summary'] += summary_txt
 
-
-	return 'summary_txt'
+	return category_txt
